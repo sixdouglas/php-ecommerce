@@ -1,0 +1,2 @@
+# disable visiting directories
+Options -Indexes
