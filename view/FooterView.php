@@ -14,14 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-return [
-    'database' => [
-        'host' => 'localhost',
-        'port' => 3307,
-        'name' => 'sample_webapp_db',
-        'user' => 'root',
-        'password' => ''
-    ]
-];
 ?>
+<footer>
+  <div class="page-footer blue lighten-2">
+    <div class="footer-copyright">
+      <div class="container">
+        <span>Wonderfull website.</span>
+        <span class="right hide-on-small-only">
+          <a class="grey-text text-lighten-2" href="libs/LICENSE.txt">Apache II License</a>
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>

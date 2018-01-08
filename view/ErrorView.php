@@ -14,14 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-return [
-    'database' => [
-        'host' => 'localhost',
-        'port' => 3307,
-        'name' => 'sample_webapp_db',
-        'user' => 'root',
-        'password' => ''
-    ]
-];
 ?>
+<pre>
+<?= $errorMsg ?>
+</pre>

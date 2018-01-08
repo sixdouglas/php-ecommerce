@@ -1,4 +1,3 @@
-<?php
 /*
  * Copyright 2018 the original author or authors.
  *
@@ -15,13 +14,29 @@
  * limitations under the License.
  */
 
-return [
-    'database' => [
-        'host' => 'localhost',
-        'port' => 3307,
-        'name' => 'sample_webapp_db',
-        'user' => 'root',
-        'password' => ''
-    ]
-];
-?>
+  /*Preloader*/
+  $(window).on('load', function() {
+    setTimeout(function() {
+      $('body').addClass('loaded');
+    }, 200);
+  });
+
+  $(function() {
+
+    "use strict";
+
+    var window_width = $(window).width();
+    var openIndex;
+
+    // Notification & Profile Dropdown
+    $('.notification-button, .profile-button').dropdown({
+      inDuration: 300,
+      outDuration: 225,
+      constrainWidth: false,
+      hover: true,
+      gutter: 0,
+      belowOrigin: true,
+      alignment: 'right',
+      stopPropagation: false
+    });
+});

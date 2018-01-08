@@ -31,3 +31,84 @@ toc::[]
 == Description
 
 This project is a Simple PHP ECommerce Web App 
+
+== Main page
+
+Simple page with some text in the middle, a footer with the licence and some text.
+On the header you have the logo and the web site name, a search bar in the middle, 
+a notification and a profile icon on the right.
+
+== Website structure
+
+  |
+  +--controller
+  |  +--AbstracController.php
+  |  +--MainController.php
+  |  +--Router.php
+  |
+  +--view
+  |  +--ErrorView.php
+  |  +--FooterView.php
+  |  +--HeaderView.php
+  |  +--MainView.php
+  |  +--TemplateView.php
+  |  +--View.php
+  |
+  +--index.php
+
+In the `index.php` file we instanciate the Router and run it. 
+
+  $router = new Router($config);
+  $router->routerQuery();
+
+The Router is, for the moment, only able to deal with the main page. 
+So whatever the incoming parameters are, we will only render one file page `MainView`.
+
+  $view = new View("Main");
+  $view->render([]);
+
+The View will render the `HeaderView`, the `MainView`, and then render the `TemplateView` 
+with the `HeaderView` and the `MainView` to fill in the template.
+
+== Self-hosted third Libraries or work on this Website __Offline__
+
+If you want to make this site available when you're not connected to Internet (it seems weird to say it :))
+or host yourself the third libraries used in this website, all you hav to is to download the following libraries in the `libs` folder:
+
+  |
+  +--libs
+     +--fonts
+     │  +--roboto
+     |        LICENSE.txt
+     |        Roboto-Black.ttf
+     |        Roboto-BlackItalic.ttf
+     |        Roboto-Bold.ttf
+     |        Roboto-BoldItalic.ttf
+     |        Roboto-Italic.ttf
+     |        Roboto-Light.ttf
+     |        Roboto-LightItalic.ttf
+     |        Roboto-Medium.ttf
+     |        Roboto-MediumItalic.ttf
+     |        Roboto-Regular.ttf
+     |        Roboto-Thin.ttf
+     |        Roboto-ThinItalic.ttf
+     +--jquery
+     │  +--3.2.1
+     |        jquery-3.2.1.min.js
+     +--materialicons
+     │  +--v33
+     |        2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2
+     |        icon.css
+     +--materialize
+       +--0.100.2
+           +--css
+           |     materialize.min.css
+           +--fonts
+           │  +--roboto
+           |        Roboto-Bold.woff2
+           |        Roboto-Light.woff2
+           |        Roboto-Regular.woff2
+           +--js
+                 materialize.min.js
+
+And then you need to comment the online URL in the TemplateView.php and uncomment the local URL

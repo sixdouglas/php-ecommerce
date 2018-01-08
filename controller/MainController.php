@@ -15,13 +15,23 @@
  * limitations under the License.
  */
 
-return [
-    'database' => [
-        'host' => 'localhost',
-        'port' => 3307,
-        'name' => 'sample_webapp_db',
-        'user' => 'root',
-        'password' => ''
-    ]
-];
-?>
+require_once 'AbstractController.php';
+require_once 'view/View.php';
+
+class MainController extends AbstractController
+{
+    private $logger;
+    private $config;
+
+    public function __construct($config)
+    {
+        $this->config = $config;
+        $this->logger = new Logger("MainController");
+    }
+
+    public function main()
+    {
+        $view = new View("Main");
+        $view->render([]);
+    }
+}

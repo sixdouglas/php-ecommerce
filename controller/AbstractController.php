@@ -15,13 +15,8 @@
  * limitations under the License.
  */
 
-return [
-    'database' => [
-        'host' => 'localhost',
-        'port' => 3307,
-        'name' => 'sample_webapp_db',
-        'user' => 'root',
-        'password' => ''
-    ]
-];
+abstract class AbstractController {
+
+}
+
 ?>
