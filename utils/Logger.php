@@ -45,7 +45,7 @@ class Logger {
         $date = date('Y-m-d H:i:s');
         $outputMessage = '';
         if (is_array($message)){
-            if (is_array($message[0])){
+            if (!empty($message) && is_array($message[0])){
                 $func = function($row) {
                     return implode(',', $row);
                 };

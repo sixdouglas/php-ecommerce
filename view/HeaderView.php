@@ -46,7 +46,11 @@
                     <li>
                         <a href="javascript:void(0);" class="waves-effect waves-block waves-light profile-button" data-activates="profile-dropdown">
                             <span class="avatar-status avatar-online">
+                            <?php if (empty($user)){ ?>
                                 <img src="img/avatar/unlogged.png" alt="avatar">
+                            <?php } else { ?>
+                                <img src="img/avatar/<?php echo $user["avatar"] ?>.png" alt="avatar">
+                            <?php } ?>
                                 <i></i>
                             </span>
                         </a>
@@ -56,10 +60,17 @@
                                 <i class="material-icons">live_help</i> Help</a>
                             </li>
                             <li class="divider"></li>
+                            <?php if (empty($user)){ ?>
                             <li>
                                 <a href="index.php?action=ident" class="grey-text text-darken-1">
-                                <i class="material-icons">lock_outline</i> Login</a>
+                                <i class="material-icons">open_in_browser</i> Login</a>
                             </li>
+                            <?php } else { ?>
+                            <li>
+                                <a href="index.php?action=logout" class="grey-text text-darken-1">
+                                <i class="material-icons">exit_to_app</i> Logout</a>
+                            </li>
+                            <?php } ?>
                         </ul>
                     </li>
                 </ul>

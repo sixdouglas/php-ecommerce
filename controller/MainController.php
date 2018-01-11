@@ -31,7 +31,11 @@ class MainController extends AbstractController
 
     public function main()
     {
+        $user = null;
+        if (isset($_SESSION['user'])){
+          $user = $_SESSION['user'];
+        }
         $view = new View("Main");
-        $view->render([]);
+        $view->render(array('user' => $user));
     }
 }
