@@ -16,26 +16,36 @@
  */
 
 require_once 'AbstractController.php';
+require_once('model/ProductTypeModel.php');
 require_once 'view/View.php';
 
 class MainController extends AbstractController
 {
     private $logger;
     private $config;
+    private $productTypeModel;
 
     public function __construct($config)
     {
         $this->config = $config;
+        $this->productTypeModel = new ProductTypeModel($config);
         $this->logger = new Logger("MainController");
     }
 
     public function main()
     {
+        $productTypes = $this->productTypeModel->getProductTypes();
+
         $user = null;
         if (isset($_SESSION['user'])){
           $user = $_SESSION['user'];
         }
         $view = new View("Main");
-        $view->render(array('user' => $user));
+        $view->render(
+            array('productTypes' => $productTypes, 
+                  'selectedProductType' => -1,
+                  'user' => $user
+            )
+        );
     }
 }

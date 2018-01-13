@@ -33,12 +33,16 @@ class View {
     $header = $this->renderFile('view/HeaderView.php', $data);
     ob_clean();
 
+    // Render the Menu
+    $menu = $this->renderFile('view/MenuView.php', $data);
+    ob_clean();
+    
     // Render the Content
     $content = $this->renderFile($this->file, $data);
     ob_clean();
 
     // Render the Template filling blanks with Header and Content
-    $view = $this->renderFile('view/TemplateView.php', array('header' => $header, 'content' => $content));
+    $view = $this->renderFile('view/TemplateView.php', array('header' => $header, 'menu' => $menu, 'content' => $content));
     // Send View to browser
     ob_end_flush();
   }

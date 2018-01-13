@@ -45,6 +45,7 @@
         <?php echo $header; ?>
         <main class="page">
             <div class="container">
+                <?php echo $menu; ?>
                 <?php echo $content; ?>
             </div>
         </main>

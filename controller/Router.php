@@ -2,14 +2,14 @@
 /*
  * Copyright 2018 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an 'AS IS' BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -17,6 +17,8 @@
 
 require_once 'controller/MainController.php';
 require_once 'controller/SessionController.php';
+require_once 'controller/ProductTypeController.php';
+require_once 'controller/ProductController.php';
 require_once 'View/View.php';
 
 class Router {
@@ -24,30 +26,38 @@ class Router {
   private $logger;
   private $mainCtrl;
   private $sessionCtrl;
-  
+  private $productTypeCtrl;
+  private $productCtrl;
+
   public function __construct($config) {
     $this->config = $config;
-    $this->logger = new Logger("Router");
+    $this->logger = new Logger('Router');
     $this->sessionCtrl = new SessionController($config);
+    $this->productTypeCtrl = new ProductTypeController($config);
+    $this->productCtrl = new ProductController($config);
     $this->mainCtrl = new MainController($config);
   }
 
   // Deal with incoming requests
   public function routerQuery() {
-    $this->logger->logInfo("routerQuery");
+    $this->logger->logInfo('routerQuery');
 
     try {
       if (isset($_GET['action'])) {
         $this->logger->logInfo('GET  action: ' . $_GET['action']);
-        if ($_GET['action'] == 'ident') {
+        if ($_GET['action'] == 'type') {
+          $this->typeAction();
+        } else if ($_GET['action'] == 'product') {
+          $this->productAction();
+        } else if ($_GET['action'] == 'ident') {
           $this->identAction();
         } else if ($_GET['action'] == 'logout') {
           $this->logoutAction();
         } else if ($_GET['action'] == 'register') {
           $this->registerAction();
         } else {
-          $this->logger->logError("Wrong Action");
-          throw new Exception("Wrong Action");
+          $this->logger->logError('Wrong Action');
+          throw new Exception('Wrong Action');
         }
       } else if (isset($_POST['action'])) {
         $this->logger->logInfo('POST action: ' . $_POST['action']);
@@ -62,31 +72,31 @@ class Router {
         $this->mainAction();
       }
     } catch (Exception $e) {
-      $this->logger->logError("Exception");
+      $this->logger->logError('Exception');
       $this->error($e->getMessage());
     }
   }
 
   private function identAction(){
-    $this->logger->logInfo("identAction");
+    $this->logger->logInfo('identAction');
     $this->sessionCtrl->ident();
   }
 
   private function registerAction(){
-    $this->logger->logInfo("registerAction");
+    $this->logger->logInfo('registerAction');
     $this->sessionCtrl->register();
   }
 
   private function logoutAction(){
-    $this->logger->logInfo("logoutAction");
+    $this->logger->logInfo('logoutAction');
     $this->sessionCtrl->logout();
     $this->mainAction();
   }
 
   private function loginAction(){
-    $this->logger->logInfo("loginAction");
-    $login="";
-    $password="";
+    $this->logger->logInfo('loginAction');
+    $login='';
+    $password='';
     if (isset($_POST['login'])) {
       $login = strval($_POST['login']);
     }
@@ -106,13 +116,13 @@ class Router {
   }
 
   private function createAction(){
-    $this->logger->logInfo("saveUserAction");
-    $firstname="";
-    $lastname="";
-    $email="";
-    $login="";
-    $password="";
-    $avatar="";
+    $this->logger->logInfo('saveUserAction');
+    $firstname='';
+    $lastname='';
+    $email='';
+    $login='';
+    $password='';
+    $avatar='';
     if (isset($_POST['firstname'])) {
       $firstname = strval($_POST['firstname']);
     }
@@ -144,14 +154,40 @@ class Router {
   }
 
   private function mainAction(){
-    $this->logger->logInfo("Main page");
+    $this->logger->logInfo('Main page');
     $this->mainCtrl->main();
+  }
+
+  private function typeAction(){
+    if (isset($_GET['id'])) {
+      $typeId = strval($_GET['id']);
+      if (!empty($typeId)) {
+        $this->productTypeCtrl->getProductType($typeId);
+      } else {
+        throw new Exception('Wrong Type Id: ' . $typeId);
+      }
+    } else {
+      throw new Exception('Undefined Line Id');
+    }
+  }
+
+  private function productAction(){
+    if (isset($_GET['id'])) {
+      $productId = strval($_GET['id']);
+      if (!empty($productId)) {
+        $this->productCtrl->getProduct($productId);
+      } else {
+        throw new Exception('Wrong Product Id: ' . $typeId);
+      }
+    } else {
+      throw new Exception('Undefined Product Id');
+    }
   }
 
   // Erreur display
   private function error($errorMsg) {
-    $this->logger->logError("Message: " . $errorMsg);
-    $view = new View("Error");
+    $this->logger->logError('Message: ' . $errorMsg);
+    $view = new View('Error');
     $view->render(array('errorMsg' => $errorMsg));
   }
 }

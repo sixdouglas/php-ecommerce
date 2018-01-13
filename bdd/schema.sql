@@ -12,7 +12,9 @@ SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-CREATE DATABASE IF NOT EXISTS `php_ecommerce_db`;
+CREATE DATABASE IF NOT EXISTS `php_ecommerce_db`
+  CHARACTER SET = 'utf8'
+  COLLATE = 'utf8_general_ci';
 
 USE `php_ecommerce_db`;
 
@@ -26,7 +28,6 @@ USE `php_ecommerce_db`;
 -- `user` table structure
 --
 
-DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `firstname` varchar(50) NOT NULL,
@@ -35,7 +36,31 @@ CREATE TABLE IF NOT EXISTS `user` (
   `login` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `avatar` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  CONSTRAINT `user_pk` PRIMARY KEY (`id`),
+  CONSTRAINT `user_idx_1` UNIQUE INDEX (`login`)
+) ENGINE=InnoDB;
 
-ALTER TABLE `user` ADD UNIQUE(`login`);
+CREATE TABLE IF NOT EXISTS `product_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(50) NOT NULL,
+  `description` varchar(4000) DEFAULT NULL,
+  CONSTRAINT `product_types_pk` PRIMARY KEY (`id`),
+  CONSTRAINT `product_types_idx_1` UNIQUE INDEX (`type`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `products` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(15) NOT NULL,
+  `name` varchar(70) NOT NULL,
+  `type` int(11) NOT NULL,
+  `scale` varchar(10) NOT NULL,
+  `vendor` varchar(50) NOT NULL,
+  `description` text NOT NULL,
+  `stock_level` smallint(6) NOT NULL,
+  `cost` decimal(10,2) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  CONSTRAINT `product_pk` PRIMARY KEY (`id`),
+  INDEX `product_idx_2` (`type`),
+  CONSTRAINT `product_idx_1` UNIQUE INDEX (`code`),
+  CONSTRAINT `products_ibfk_1` FOREIGN KEY (`type`) REFERENCES `product_types` (`id`)
+) ENGINE=InnoDB;

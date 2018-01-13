@@ -44,14 +44,10 @@ a notification and a profile icon on the right.
 
   |
   +--bdd
-  |     data.sql
-  |     schema.sql
+  |     _sql files_
   |
   +--controller
-  |     AbstracController.php
-  |     MainController.php
-  |     Router.php
-  |     SessionController.php
+  |     _Controllers_
   |
   +--css
   |
@@ -64,20 +60,13 @@ a notification and a profile icon on the right.
   +--logs
   |
   +--model
-  |     AbstractModel.php
-  |     UserModel.php
+  |     _Models_
   |
   +--utils
-  |     Logger.php
+  |     _Utilities_
   |
   +--view
-  |     ErrorView.php
-  |     FooterView.php
-  |     HeaderView.php
-  |     IdentView.php
-  |     MainView.php
-  |     TemplateView.php
-  |     View.php
+  |     _View_
   |
   +--index.php
 
@@ -93,6 +82,89 @@ On the first arrival on the application, the Router will render one file page `M
 
 The View will render the `HeaderView`, the `MainView`, and then render the `TemplateView` 
 with the `HeaderView` and the `MainView` to fill in the template.
+
+For a specific request, the Router will use either the `$_QUERY['action']` or the `$_POST['action']` variable
+to find out which controller has to be called. 
+The Controller will call the nedeed Model(s) to save (for the register part), check (for the login) or retreive (for the catalog) 
+the data from the database. It will, then call the View associated giving it the data to render the page.
+
+== Authentication
+
+=== Objects
+
+The Authentication is made by the `UserModel.php`.
+
+=== Database tables
+
+There is one Database table used for this feature: `user`. 
+
+=== Functionalities
+
+The current fuctionalities are:
+
+* check the password
+* retreive the User data
+* persiste the new User
+
+=== Routing
+
+In the Router there are three actions for the Authentication:
+
+* ident
+* login
+* logout
+* register
+* create
+
+[NOTE]
+====
+To fill the Avatar `select` on the register page, we read all **PNG** files in the `img/avatar/` directory.
+
+You should download a set on internet and unzip it in this directory. 
+
+__I suggest the wonderfull {avatar-website}[deleket] set.__
+====
+
+== Product Catalog
+
+=== Objects
+
+The Product Catalog uses two controllers:
+
+* `ProductController.php`
+* `ProductTypeController.php` 
+
+two models: 
+
+* `ProductModel.php`
+* `ProductTypeModel.php`
+
+and two views: 
+
+* `ProductView.php`
+* `ProductTypeView.php`
+
+=== Database tables
+
+There are two database tables used here: 
+
+* `product_types`
+* `products` 
+
+=== Functionalities
+
+The current fuctionalities are:
+
+* listing the product types in the left hand menu
+* viewing all product for a selected product type
+* select a product and view it's detailed informations
+
+=== Routing
+
+The Router has two actions for the Catalog:
+
+* type
+* product
 
 == Self-hosted third Libraries or work on this Website __Offline__
 
@@ -136,30 +208,3 @@ or host yourself the third libraries used in this website, all you hav to is to 
                  materialize.min.js
 
 And then you need to comment the online URL in the TemplateView.php and uncomment the local URL
-
-== Authetication
-
-The Authetication is made by the `UserModel.php`. This objet reads from the database to:
-
-* check the password
-* retreive the User data
-* persiste the new User
-
-In the Router there are three actions for the Authentication:
-
-* ident
-* login
-* logout
-* register
-* create
-
-There is one Database table used for this feature: `user`. 
-
-[NOTE]
-====
-To fill the Avatar `select` on the register page, we read all **PNG** files in the `img/avatar/` directory.
-
-You should download a set on internet and unzip it in this directory. 
-
-__I suggest the wonderfull {avatar-website}[deleket] set.__
-====

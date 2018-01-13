@@ -1,3 +1,12 @@
+img/**/*.db
+img/avatar/*.png
+
+libs/**/*.js
+libs/**/*.css
+libs/**/*.woff2
+libs/**/*.ttf
+
 log/*.txt
 
 README.html
+README.pdf

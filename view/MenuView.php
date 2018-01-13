@@ -14,16 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 ?>
-<footer>
-  <div class="page-footer cyan">
-    <div class="footer-copyright">
-      <div class="container">
-        <span class="white-text">Wonderfull website.</span>
-        <span class="right hide-on-small-only">
-          <a class="white-text" href="libs/LICENSE.txt">Apache II License</a>
-        </span>
-      </div>
-    </div>
-  </div>
-</footer>
+<aside id="left-sidebar-nav">
+    <ul id="slide-out" class="side-nav cyan lighten-2 fixed leftside-navigation">
+<?php
+    foreach($productTypes as $row => $type) {
+        $class="bold";
+        if ($type['id'] == $selectedProductType){
+            $class = $class . " active";
+        }
+?>
+        <li class="<?php echo $class; ?>"><a href="index.php?action=type&id=<?php echo $type['id'] ?>" class="waves-effect white-text"><?php echo $type['type'] ?></a></li>
+<?php } ?>
+    </ul>
+</aside>        

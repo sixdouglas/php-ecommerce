@@ -17,6 +17,7 @@
 
 require_once('AbstractController.php');
 require_once('model/UserModel.php');
+require_once('model/ProductTypeModel.php');
 require_once('utils/FileTools.php');
 
 class SessionController extends AbstractController {
@@ -24,24 +25,38 @@ class SessionController extends AbstractController {
   private $config;
   private $fileTools;
   private $userModel;
+  private $productTypeModel;
   
   public function __construct($config) {
     $this->config = $config;
     $this->logger = new Logger("SessionController");
     $this->fileTools = new FileTools();
     $this->userModel = new UserModel($config);
+    $this->productTypeModel = new ProductTypeModel($config);
   }
 
   public function ident($showError = false) {
     $this->logger->logInfo('ident: ' . $showError);
+    $productTypes = $this->productTypeModel->getProductTypes();
     $view = new View("Ident");
-    $view->render(array());
+    $view->render(
+      array('productTypes' => $productTypes,
+            'selectedProductType' => -1
+      )
+    );
   }
 
   public function register($showError = false) {
     $this->logger->logInfo('register: ' . $showError);
+    $productTypes = $this->productTypeModel->getProductTypes();
+    $avatars = $this->fileTools->findAvatars();
     $view = new View("Register");
-    $view->render(array("avatars" => $this->fileTools->findAvatars()));
+    $view->render(
+      array('productTypes' => $productTypes, 
+            'selectedProductType' => -1,
+            'avatars' => $avatars
+      )
+    );
   }
 
   public function createUser($firstname, $lastname, $email, $login, $password, $avatar){
