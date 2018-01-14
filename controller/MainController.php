@@ -29,7 +29,7 @@ class MainController extends AbstractController
     {
         $this->config = $config;
         $this->productTypeModel = new ProductTypeModel($config);
-        $this->logger = new Logger("MainController");
+        $this->logger = new Logger($config, 'MainController');
     }
 
     public function main()
@@ -45,7 +45,7 @@ class MainController extends AbstractController
             array('productTypes' => $productTypes, 
                   'selectedProductType' => -1,
                   'user' => $user
-            )
+            ), TRUE
         );
     }
 }

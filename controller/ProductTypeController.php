@@ -27,7 +27,7 @@ class ProductTypeController extends AbstractController {
 
   public function __construct($config) {
     $this->config = $config;
-    $this->logger = new Logger("ProductTypeController");
+    $this->logger = new Logger($config, '"ProductTypeController');
     $this->productTypeModel = new ProductTypeModel($config);
   }
 
@@ -47,7 +47,7 @@ class ProductTypeController extends AbstractController {
             'productTypes' => $productTypes, 
             'selectedProductType' => $selectedProductType,
             'user' => $user
-            )
-      );
+      ), TRUE
+    );
   }
 }

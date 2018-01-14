@@ -21,7 +21,7 @@ class ProductTypeModel extends AbstractModel {
 
     public function __construct($config) {
         parent::__construct($config);
-        $this->logger = new Logger('ProductTypeModel');
+        $this->logger = new Logger($config, 'ProductTypeModel');
     }    
 
     public function getProductTypes() {

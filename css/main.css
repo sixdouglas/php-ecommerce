@@ -165,12 +165,14 @@ small {
 	}
 }
 
-.page {
+main {
 	margin: 0;
     padding-top: 20px;
-    padding-left: 200px;
 }
 
+main.with-menu {
+   padding-left: 200px;
+}
 /** MENU **/
 
 #left-sidebar-nav {
@@ -291,6 +293,80 @@ h4 {
 
 /** /PRODUCT PAGE **/
 
+/** CART PAGE **/
+#cart .row {
+    margin: 0px;
+}
+#cart .default-image img {
+    max-width:90px;
+}
+#cart input[type=number]:not(.browser-default) {
+    margin: 0px;
+}
+#cart .btn-small {
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+}
+#cart .btn-small i {
+    font-size: 1.4rem;
+    line-height: 25px;
+}
+
+#cart p {
+    margin-top: 0px;
+}
+
+.vertical-align {
+    vertical-align: middle;
+}
+
+/** /CART PAGE **/
+
+/** CART-SUMMARY **/
+
+.cart-summary .title {
+    text-align: center;
+    font-size: 1.2rem;
+    margin: 0px;
+    font-weight: bold;
+}
+
+.cart-summary .total-label {
+    padding-left: 10px;
+    font-size: 1.2rem;
+    margin: 0px;
+    font-weight: bold;
+}
+
+.cart-summary .total {
+    padding: 0px;
+}
+
+.cart-summary .total-price {
+    font-size: 1.2rem;
+    margin: 0px;
+    padding-right: 10px;
+    font-weight: bold;
+}
+
+.cart-summary .row {
+    font-size: 0.9rem;
+    margin: 0px;
+    border-bottom: 1px solid #e0e0e0;
+}
+.cart-summary .row .col {
+    padding: 0px;
+}
+.cart-summary .row.line .col:first-child p {
+    margin-left: 10px;
+}
+.cart-summary .row.line .col:last-child p {
+    margin-right: 10px;
+}
+
+/** /CART-SUMMARY **/
+
 /** FOOTER **/
 body {
     display: flex;
@@ -302,7 +378,7 @@ main {
     flex: 1 0 auto;
 }
 
-footer {
+footer.with-menu {
     padding-left: 200px;
 }
 .page-footer {

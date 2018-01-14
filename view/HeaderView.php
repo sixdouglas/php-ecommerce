@@ -35,6 +35,13 @@
                     <input type="text" name="Search" class="header-search-input z-depth-2" placeholder="Explore">
                 </div>
                 <ul class="right hide-on-med-and-down">
+                <?php if (!empty($user)){ ?>
+                    <li>
+                        <a href="index.php?action=cart" class="waves-effect waves-block waves-light notification-button">
+                            <i class="material-icons">shopping_cart</i>
+                        </a>
+                    </li>
+                <?php } ?>
                     <li>
                         <a href="javascript:void(0);" class="waves-effect waves-block waves-light notification-button" data-activates="notifications-dropdown">
                             <i class="material-icons">notifications_none

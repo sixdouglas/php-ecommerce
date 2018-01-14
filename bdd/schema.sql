@@ -64,3 +64,28 @@ CREATE TABLE IF NOT EXISTS `products` (
   CONSTRAINT `product_idx_1` UNIQUE INDEX (`code`),
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`type`) REFERENCES `product_types` (`id`)
 ) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `orders` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `shipped_date` timestamp DEFAULT NULL,
+  `status` varchar(15) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  CONSTRAINT `order_pk` PRIMARY KEY (`id`),
+  INDEX `order_idx_1` (`customer_id`),
+  CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `order_lines` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` smallint(6) NOT NULL,
+  `cost` decimal(10,2) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  CONSTRAINT `order_lines_pk` PRIMARY KEY (`id`),
+  INDEX `order_lines_idx_1` (`order_id`),
+  CONSTRAINT `order_lines_idx_2` UNIQUE INDEX (`product_id`),
+  CONSTRAINT `order_lines_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  CONSTRAINT `order_lines_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB;

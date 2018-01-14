@@ -15,15 +15,13 @@
  * limitations under the License.
  */
 ?>
-<footer>
-  <div class="page-footer cyan">
-    <div class="footer-copyright">
-      <div class="container">
-        <span class="white-text">Wonderfull website.</span>
-        <span class="right hide-on-small-only">
-          <a class="white-text" href="libs/LICENSE.txt">Apache II License</a>
-        </span>
-      </div>
+<div class="page-footer cyan">
+  <div class="footer-copyright">
+    <div class="container">
+      <span class="white-text">Wonderfull website.</span>
+      <span class="right hide-on-small-only">
+        <a class="white-text" href="libs/LICENSE.txt">Apache II License</a>
+      </span>
     </div>
   </div>
-</footer>
+</div>

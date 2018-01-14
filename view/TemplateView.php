@@ -43,14 +43,16 @@
 	</head>
 	<body class="grey lighten-5">
         <?php echo $header; ?>
-        <main class="page">
+        <main class="page <?php if (isset($menu)) { echo 'with-menu'; } ?>">
             <div class="container">
-                <?php echo $menu; ?>
+                <?php if (isset($menu)) { echo $menu; } ?>
                 <?php echo $content; ?>
             </div>
         </main>
 		
+        <footer class="<?php if (isset($menu)) { echo 'with-menu'; } ?>">
         <?php include('FooterView.php'); ?>
+        </footer>
 
         <!--Import jQuery before materialize.js-->
         <!--

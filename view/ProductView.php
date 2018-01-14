@@ -35,11 +35,13 @@
     </div>
     <div class="col l3 m4 s6">
         <div class="picture"><img src="img/products/<?= $product['code'] ?>.jpg" /></div>
-        <div class="price"><?= $product['price'] ?> €</div>
-        <?php if (!empty($user)){ ?>
-        <div class="add-to-cart">
-            <a href="index.php?action=addToCart&id=<?= $product['id'] ?>" class="waves-effect waves-light btn blue lighten-2">Add to Cart</a>
+        <div class="price">
+            <?= $product['price'] ?> €
+            <?php if (!empty($user)){ ?>
+            <a href="index.php?action=addToCart&id=<?= $product['id'] ?>" class="btn-floating waves-effect waves-light cyan">
+                <i class="material-icons">add_shopping_cart</i>
+            </a>
+            <?php } ?>
         </div>
-        <?php } ?>
     </div>
 </div>

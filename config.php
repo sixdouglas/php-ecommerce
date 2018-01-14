@@ -22,6 +22,7 @@ return [
         'name' => 'php_ecommerce_db',
         'user' => 'root',
         'password' => ''
-    ]
+    ],
+    'logLevel' => 'INFO'
 ];
 ?>

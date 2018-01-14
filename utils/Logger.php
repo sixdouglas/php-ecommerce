@@ -20,39 +20,42 @@ class Logger {
     private const DESTINATION = "log/applicationLog.txt";
     
     private $caller;
+    private $config;
 
-    public function __construct($caller) {
+    public function __construct($config, $caller) {
         $this->caller = $caller;
+        $this->config = $config;
     }
 
     public function logError($message){
-        $this->log('ERROR', $message);
+        if ($this->config['logLevel'] == 'ERROR' || $this->config['logLevel'] == 'WARNING' || $this->config['logLevel'] == 'INFO' || $this->config['logLevel'] == 'DEBUG'){
+            $this->log('ERROR', $message);
+        }
     }
 
     public function logWarning($message){
-        $this->log('WARNING', $message);
+        if ($this->config['logLevel'] == 'WARNING' || $this->config['logLevel'] == 'INFO' || $this->config['logLevel'] == 'DEBUG'){
+            $this->log('WARNING', $message);
+        }
     }
 
     public function logInfo($message){
-        $this->log('INFO', $message);
+        if ($this->config['logLevel'] == 'INFO' || $this->config['logLevel'] == 'DEBUG'){
+            $this->log('INFO', $message);
+        }
     }
 
     public function logDebug($message){
-        $this->log('DEBUG', $message);
+        if ($this->config['logLevel'] == 'DEBUG'){
+            $this->log('DEBUG', $message);
+        }
     }
 
     private function log($level, $message){
         $date = date('Y-m-d H:i:s');
         $outputMessage = '';
         if (is_array($message)){
-            if (!empty($message) && is_array($message[0])){
-                $func = function($row) {
-                    return implode(',', $row);
-                };
-                $outputMessage = implode(',', array_map($func, $message));
-            }else{
-                $outputMessage = implode(',', $message);
-            }
+            array_walk_recursive($message, 'Logger::test_print');
         } else if ($message instanceof PDOStatement){
             $outputMessage = 'PDOStatement errorCode: ' . $message->errorCode() . ', queryString: ' . $message->queryString;
         } else {
@@ -62,6 +65,12 @@ class Logger {
         error_log($date . " " . $this->caller . " " . $level . " " . $outputMessage . "\n", Logger::MESSAGE_TYPE, Logger::DESTINATION);
     }
 
+    function test_print($item, $key) {
+        $date = date('Y-m-d H:i:s');
+        $level = 'DEBUG';
+        $outputMessage = "Key: $key, Value: $item";
+        error_log($date . " " . $this->caller . " " . $level . " " . $outputMessage . "\n", Logger::MESSAGE_TYPE, Logger::DESTINATION);
+    }
 }
 
 ?>

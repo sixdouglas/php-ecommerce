@@ -121,3 +121,7 @@ insert  into `products`(`code`,`name`,`type`,`scale`,`vendor`,`description`,`sto
 ('S700_4002','American Airlines: MD-11S',3,'1:700','Second Gear Diecast','Polished finish. Exact replia with official logos and insignias and retractable wheels',8820,'36.27','74.03'),
 ('S72_1253','Boeing X-32A JSF',3,'1:72','Motor City Art Classics','10\" Wingspan with retractable landing gears.Comes with pilot',4857,'32.77','49.66'),
 ('S72_3212','Pont Yacht',4,'1:72','Unimax Art Galleries','Measures 38 inches Long x 33 3/4 inches High. Includes a stand.\r\nMany extras including rigging, long boats, pilot house, anchors, etc. Comes with 2 masts, all square-rigged',414,'33.30','54.60');
+
+insert into `payment_types` (`name`) value ('Bank card');
+insert into `payment_types` (`name`) value ('Bank check');
+insert into `payment_types` (`name`) value ('Gift card');

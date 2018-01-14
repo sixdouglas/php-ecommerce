@@ -25,7 +25,7 @@ abstract class AbstractModel
     public function __construct($config)
     {
         $this->config = $config;
-        $this->logger = new Logger('AbstractModel');
+        $this->logger = new Logger($config, 'AbstractModel');
     }
 
     // Execute SQL Query, prepared if possible
@@ -35,6 +35,7 @@ abstract class AbstractModel
         if ($params == null) {
             $resultat = $this->getDb()->query($sql); // execute right away
         } else {
+            $this->logger->logDebug($params);
             $resultat = $this->getDb()->prepare($sql); // prepared query
             $resultat->execute($params);
         }
@@ -48,6 +49,7 @@ abstract class AbstractModel
         if ($params == null) {
             $return = $this->getDb()->query($sql); // execute right away
         } else {
+            $this->logger->logDebug($params);
             $resultat = $this->getDb()->prepare($sql); // prepared query
             $return = $resultat->execute($params);
         }
@@ -56,7 +58,7 @@ abstract class AbstractModel
     }
 
     // Get DB connection Object, initialize it if needed
-    private function getDB()
+    protected function getDB()
     {
         if ($this->db == null) {
             // Connection creation

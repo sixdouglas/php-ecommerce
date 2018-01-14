@@ -19,9 +19,8 @@ class FileTools {
 
     private $logger;
 
-    public function __construct()
-    {
-        $this->logger = new Logger('FileTools');
+    public function __construct($config) {
+        $this->logger = new Logger($config, 'FileTools');
     }
 
     public function findAvatars(){

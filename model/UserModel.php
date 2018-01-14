@@ -24,7 +24,7 @@ class UserModel extends AbstractModel {
     
     public function __construct($config) {
         parent::__construct($config);
-        $this->logger = new Logger('UserModel');
+        $this->logger = new Logger($config, 'UserModel');
     }    
     
     public function login($login, $password){
@@ -72,6 +72,7 @@ class UserModel extends AbstractModel {
         $retour = FALSE;
         try {
             if (!empty($login)){
+                $this->getDb()->beginTransaction();
                 $sql = 'INSERT INTO user (firstname, lastname, email, login, password, avatar) VALUES (:firstname, :lastname, :email, :login, :password, :avatar)';
                 $retour = $this->executeSimpleQuery($sql, array(':firstname' => $firstname, 
                                     ':lastname' => $lastname, 
@@ -79,6 +80,7 @@ class UserModel extends AbstractModel {
                                     ':login' => $login, 
                                     ':password' => $password, 
                                     ':avatar' => $avatar));
+                $this->getDb()->commit();
             }
         } catch(PDOException $ex) {
             $this->logger->logError('An Error occured!');

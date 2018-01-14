@@ -14,35 +14,51 @@
  * limitations under the License.
  */
 
-  /*Preloader*/
-  $(window).on('load', function() {
-    setTimeout(function() {
-      $('body').addClass('loaded');
-    }, 200);
+/*Preloader*/
+$(window).on('load', function() {
+  setTimeout(function() {
+    $('body').addClass('loaded');
+  }, 200);
+});
+
+$(function() {
+
+  "use strict";
+
+  var window_width = $(window).width();
+  var openIndex;
+
+  // Notification & Profile Dropdown
+  $('.notification-button, .profile-button').dropdown({
+    inDuration: 300,
+    outDuration: 225,
+    constrainWidth: false,
+    hover: true,
+    gutter: 0,
+    belowOrigin: true,
+    alignment: 'right',
+    stopPropagation: false
   });
-
-  $(function() {
-
-    "use strict";
-
-    var window_width = $(window).width();
-    var openIndex;
-
-    // Notification & Profile Dropdown
-    $('.notification-button, .profile-button').dropdown({
-      inDuration: 300,
-      outDuration: 225,
-      constrainWidth: false,
-      hover: true,
-      gutter: 0,
-      belowOrigin: true,
-      alignment: 'right',
-      stopPropagation: false
-    });
 });
 
 
 $(document).ready(function() {
   Materialize.updateTextFields();
   $('select').material_select();
+
+  $('.subremove').click( function() {
+    var parents = $(this).parents('form');
+    var inputs = parents.children('input.cart-action');
+    var value = inputs[0].value;
+    console.log("cart-action value: " + value);
+    inputs[0].value = 'remove';
+  });
+
+  $('.subupdate').click( function() {
+    var parents = $(this).parents('form');
+    var inputs = parents.children('input.cart-action');
+    var value = inputs[0].value;
+    console.log("cart-action value: " + value);
+    inputs[0].value = 'update';
+  });
 });

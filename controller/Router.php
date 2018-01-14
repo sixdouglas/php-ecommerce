@@ -19,6 +19,7 @@ require_once 'controller/MainController.php';
 require_once 'controller/SessionController.php';
 require_once 'controller/ProductTypeController.php';
 require_once 'controller/ProductController.php';
+require_once 'controller/CartController.php';
 require_once 'View/View.php';
 
 class Router {
@@ -28,14 +29,16 @@ class Router {
   private $sessionCtrl;
   private $productTypeCtrl;
   private $productCtrl;
+  private $cartCtrl;
 
   public function __construct($config) {
     $this->config = $config;
-    $this->logger = new Logger('Router');
+    $this->logger = new Logger($config, 'Router');
     $this->sessionCtrl = new SessionController($config);
     $this->productTypeCtrl = new ProductTypeController($config);
     $this->productCtrl = new ProductController($config);
     $this->mainCtrl = new MainController($config);
+    $this->cartCtrl = new CartController($config);
   }
 
   // Deal with incoming requests
@@ -55,6 +58,10 @@ class Router {
           $this->logoutAction();
         } else if ($_GET['action'] == 'register') {
           $this->registerAction();
+        } else if ($_GET['action'] == 'cart') {
+          $this->cartAction();
+        } else if ($_GET['action'] == 'addToCart') {
+          $this->addToCartAction();
         } else {
           $this->logger->logError('Wrong Action');
           throw new Exception('Wrong Action');
@@ -65,6 +72,10 @@ class Router {
           $this->loginAction();
         } else if ($_POST['action'] == 'create') {
           $this->createAction();
+        } else if ($_POST['action'] == 'remove') {
+          $this->removeFromCartAction();
+        } else if ($_POST['action'] == 'update') {
+          $this->updateCartItemAction();
         } else {  // aucune action définie : affichage de l'accueil
           $this->mainAction();
         }
@@ -73,6 +84,7 @@ class Router {
       }
     } catch (Exception $e) {
       $this->logger->logError('Exception');
+      $this->logger->logError($e->__toString());
       $this->error($e->getMessage());
     }
   }
@@ -171,6 +183,60 @@ class Router {
     }
   }
 
+  private function addToCartAction(){
+    $this->logger->logInfo('addToCartAction');
+    if (isset($_GET['id'])) {
+      $productId = strval($_GET['id']);
+      if (!empty($productId)) {
+        $this->cartCtrl->addToCart($productId);
+      } else {
+        throw new Exception('Wrong Product Id: ' . $productId);
+      }
+    } else {
+      throw new Exception('Undefined Product Id');
+    }
+
+    $this->cartAction();
+  }
+
+  private function removeFromCartAction(){
+    $this->logger->logInfo('removeFromCartAction');
+    if (isset($_POST['id'])) {
+      $orderLineId = strval($_POST['id']);
+      if (!empty($orderLineId)) {
+        $this->cartCtrl->removeFromCart($orderLineId);
+      } else {
+        throw new Exception('Wrong Order Line Id: ' . $orderLineId);
+      }
+    } else {
+      throw new Exception('Undefined Order Line Id');
+    }
+
+    $this->cartAction();
+  }
+
+  private function updateCartItemAction(){
+    $this->logger->logInfo('updateCartItemAction');
+    if (isset($_POST['id']) && isset($_POST['quantity'])) {
+      $orderLineId = strval($_POST['id']);
+      $quantity = strval($_POST['quantity']);
+      if (!empty($orderLineId) && !empty($quantity)) {
+        $this->cartCtrl->updateCartItem($orderLineId, $quantity);
+      } else {
+        throw new Exception('Wrong Order Line Id: ' . $orderLineId . ', or Quantity not set');
+      }
+    } else {
+      throw new Exception('Undefined Order Line Id or Quantity not set');
+    }
+
+    $this->cartAction();
+  }
+
+  private function cartAction(){
+    $this->logger->logInfo('cartAction');
+    $this->cartCtrl->cart();
+  }
+
   private function productAction(){
     if (isset($_GET['id'])) {
       $productId = strval($_GET['id']);
@@ -188,7 +254,7 @@ class Router {
   private function error($errorMsg) {
     $this->logger->logError('Message: ' . $errorMsg);
     $view = new View('Error');
-    $view->render(array('errorMsg' => $errorMsg));
+    $view->render(array('errorMsg' => $errorMsg, 'productTypes' => [], 'selectedProductType' => -1));
   }
 }
 

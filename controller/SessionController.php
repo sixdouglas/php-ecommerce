@@ -29,8 +29,8 @@ class SessionController extends AbstractController {
   
   public function __construct($config) {
     $this->config = $config;
-    $this->logger = new Logger("SessionController");
-    $this->fileTools = new FileTools();
+    $this->logger = new Logger($config, 'SessionController');
+    $this->fileTools = new FileTools($config);
     $this->userModel = new UserModel($config);
     $this->productTypeModel = new ProductTypeModel($config);
   }
@@ -42,7 +42,7 @@ class SessionController extends AbstractController {
     $view->render(
       array('productTypes' => $productTypes,
             'selectedProductType' => -1
-      )
+      ), FALSE
     );
   }
 
@@ -55,7 +55,7 @@ class SessionController extends AbstractController {
       array('productTypes' => $productTypes, 
             'selectedProductType' => -1,
             'avatars' => $avatars
-      )
+      ), FALSE
     );
   }
 

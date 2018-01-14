@@ -166,6 +166,51 @@ The Router has two actions for the Catalog:
 * type
 * product
 
+== Cart
+
+=== Objects
+
+The Cart uses one controller:
+
+* `CartController.php`
+
+one model: 
+
+* `CartModel.php`
+
+and one view: 
+
+* `CartView.php`
+
+=== Database tables
+
+There are two database tables used here: 
+
+* `orders`
+* `order_lines` 
+
+=== Functionalities
+
+The current fuctionalities are:
+
+* add product to cart from the ProductPage
+* change product quantity from the CartPage
+* remove a product from cart from the CartPage
+
+=== Routing
+
+The Router has two actions for the Catalog:
+
+* cart
+* addToCart
+* update
+* remove
+
+[NOTE]
+====
+You need to be logged-in to view the add to cart button.
+====
+
 == Self-hosted third Libraries or work on this Website __Offline__
 
 If you want to make this site available when you're not connected to Internet (it seems weird to say it :))

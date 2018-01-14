@@ -26,7 +26,7 @@ class View {
   }
 
   // Render and display the View
-  public function render($data) {
+  public function render($data, $withMenu) {
     // Start output buffering
     ob_start();
     // Render the Header
@@ -34,8 +34,12 @@ class View {
     ob_clean();
 
     // Render the Menu
-    $menu = $this->renderFile('view/MenuView.php', $data);
-    ob_clean();
+    if ($withMenu){
+      $menu = $this->renderFile('view/MenuView.php', $data);
+      ob_clean();
+    }else{
+      $menu = null;
+    }
     
     // Render the Content
     $content = $this->renderFile($this->file, $data);

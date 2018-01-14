@@ -42,9 +42,3 @@
     </div>
   </form>
 </div>
-
-<script>
-$(document).ready(function() {
-    Materialize.updateTextFields();
-  });
-</script>
