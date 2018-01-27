@@ -32,10 +32,10 @@
     </div>
     <div class="row">
       <div class="col s12">
-          <button class="btn waves-effect waves-light" type="submit" name="sublog">Login
+          <button class="btn waves-effect waves-light cyan" type="submit" name="sublog">Login
               <i class="material-icons right">send</i>
           </button>
-          <a class="btn waves-effect waves-light" href="index.php?action=register" name="subreg">Register
+          <a class="btn waves-effect waves-light cyan" href="index.php?action=register" name="subreg">Register
               <i class="material-icons right">person_add</i>
           </a>
       </div>

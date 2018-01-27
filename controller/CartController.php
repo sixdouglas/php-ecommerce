@@ -43,6 +43,10 @@ class CartController extends AbstractController {
 
     $cartProducts = $this->cartModel->getCartProducts($user);
 
+    if(!empty($cartProducts) && !empty($cartProducts[0])){
+      $_SESSION['orderId'] = $cartProducts[0]['order_id'];
+    }
+
     $view = new View("Cart");
     $view->render(
       array('productTypes' => [], 

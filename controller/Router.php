@@ -20,6 +20,7 @@ require_once 'controller/SessionController.php';
 require_once 'controller/ProductTypeController.php';
 require_once 'controller/ProductController.php';
 require_once 'controller/CartController.php';
+require_once 'controller/ShippingController.php';
 require_once 'View/View.php';
 
 class Router {
@@ -30,6 +31,7 @@ class Router {
   private $productTypeCtrl;
   private $productCtrl;
   private $cartCtrl;
+  private $shippingCtrl;
 
   public function __construct($config) {
     $this->config = $config;
@@ -39,6 +41,7 @@ class Router {
     $this->productCtrl = new ProductController($config);
     $this->mainCtrl = new MainController($config);
     $this->cartCtrl = new CartController($config);
+    $this->shippingCtrl = new ShippingController($config);
   }
 
   // Deal with incoming requests
@@ -62,6 +65,10 @@ class Router {
           $this->cartAction();
         } else if ($_GET['action'] == 'addToCart') {
           $this->addToCartAction();
+        } else if ($_GET['action'] == 'validate') {
+          $this->validateCartAction(); // Display Home Delivery Fees and display default address
+        } else if ($_GET['action'] == 'createAddress') {
+          $this->createAddressAction();
         } else {
           $this->logger->logError('Wrong Action');
           throw new Exception('Wrong Action');
@@ -76,6 +83,8 @@ class Router {
           $this->removeFromCartAction();
         } else if ($_POST['action'] == 'update') {
           $this->updateCartItemAction();
+        } else if ($_POST['action'] == 'saveAddress') {
+          $this->saveAddressAction();
         } else {  // aucune action définie : affichage de l'accueil
           $this->mainAction();
         }
@@ -237,6 +246,60 @@ class Router {
     $this->cartCtrl->cart();
   }
 
+  private function validateCartAction(){
+    $this->logger->logInfo('validateCartAction');
+    $this->shippingCtrl->validateCart();
+  }
+
+  private function createAddressAction(){
+    $this->logger->logInfo('createAddressAction');
+    $this->shippingCtrl->createAddress();
+  }
+
+  private function saveAddressAction(){
+    $this->logger->logInfo('saveAddressAction');
+    $line1 = '';
+    $line2 = '';
+    $line3 = '';
+    $line4 = '';
+    $line5 = '';
+    $postalCode = '';
+    $city = '';
+    $countryCode = '';
+
+    if (isset($_POST['line1'])) {
+      $line1 = strval($_POST['line1']);
+    }
+    if (isset($_POST['line2'])) {
+      $line2 = strval($_POST['line2']);
+    }
+    if (isset($_POST['line3'])) {
+      $line3 = strval($_POST['line3']);
+    }
+    if (isset($_POST['line4'])) {
+      $line4 = strval($_POST['line4']);
+    }
+    if (isset($_POST['line5'])) {
+      $line5 = strval($_POST['line5']);
+    }
+    if (isset($_POST['postalCode'])) {
+      $postalCode = strval($_POST['postalCode']);
+    }
+    if (isset($_POST['city'])) {
+      $city = strval($_POST['city']);
+    }
+    if (isset($_POST['country'])) {
+      $country = strval($_POST['country']);
+    }
+
+    if (!empty($line1) && !empty($postalCode) && !empty($city) && !empty($country)) {
+      $this->shippingCtrl->saveAddress($line1, $line2, $line3, $line4, $line5, $postalCode, $city, $country);
+      $this->shippingCtrl->validateCart();
+    } else {
+      $this->createAddressAction();
+    }
+  }
+
   private function productAction(){
     if (isset($_GET['id'])) {
       $productId = strval($_GET['id']);
@@ -254,7 +317,7 @@ class Router {
   private function error($errorMsg) {
     $this->logger->logError('Message: ' . $errorMsg);
     $view = new View('Error');
-    $view->render(array('errorMsg' => $errorMsg, 'productTypes' => [], 'selectedProductType' => -1));
+    $view->render(array('errorMsg' => $errorMsg, 'productTypes' => [], 'selectedProductType' => -1), FALSE);
   }
 }
 

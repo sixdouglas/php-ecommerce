@@ -95,5 +95,14 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col s12">
+                <p class="right-align">
+                    <a class="btn waves-effect waves-light cyan" href="index.php?action=validate" name="subValidate">Validate
+                        <i class="material-icons">chevron_right</i>
+                    </a>
+                </p>
+            </div>
+        </div>
     </div>
 </div>

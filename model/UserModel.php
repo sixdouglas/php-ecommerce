@@ -67,6 +67,115 @@ class UserModel extends AbstractModel {
         return $user;
     }
     
+    public function getDefaultShippingAddress($user){
+        $this->logger->logDebug('getDefaultShippingAddress(' . $user['id'] . ')');
+        try {
+            if (!empty($user)){
+                $sql = 'SELECT adr.id AS addressId, '.
+                                'adr.address_line_1 AS line1, '.
+                                'adr.address_line_2 AS line2, '.
+                                'adr.address_line_3 AS line3, ' .
+                                'adr.address_line_4 AS line4, '.
+                                'adr.address_line_5 AS line5, '.
+                                'adr.postal_code AS postalCode, '.
+                                'adr.city_name AS cityName, ' .
+                                'adr.country_code AS countryCode, '.
+                                'cty.name AS countryName ' .
+                        'FROM user_address AS adr '.
+                            'INNER JOIN user AS usr ON '.
+                                'usr.id = adr.user_id '.
+                            'AND usr.shipping_address = adr.id '.
+                            'INNER JOIN country AS cty ON '.
+                                'cty.alpha3 = adr.country_code '.
+                        'WHERE adr.user_id = :userId';
+                $userAddresses = $this->executeQuery($sql, array(':userId' => $user['id']));
+            }
+        } catch(PDOException $ex) {
+            $this->logger->logError('An Error occured!');
+            $this->logger->logError($ex->getMessage());
+            throw $ex;
+        }
+
+        if (!empty($userAddresses)){
+            return $userAddresses[0];
+        } else {
+            return NULL;
+        }
+    }
+    
+    public function getAddresses($user){
+        $this->logger->logDebug('getAddresses(' . $user['id'] . ')');
+        try {
+            if (!empty($user)){
+                $sql = 'SELECT adr.id AS addressId, '.
+                                'adr.address_line_1 AS line1, '.
+                                'adr.address_line_2 AS line2, '.
+                                'adr.address_line_3 AS line3, ' .
+                                'adr.address_line_4 AS line4, '.
+                                'adr.address_line_5 AS line5, '.
+                                'adr.postal_code AS postalCode, '.
+                                'adr.city_name AS cityName, ' .
+                                'adr.country_code AS countryCode, '.
+                                'cty.name AS countryName ' .
+                        'FROM user_address AS adr '.
+                            'INNER JOIN country AS cty ON '.
+                                'cty.alpha3 = adr.country_code '.
+                        'WHERE user_id = :userId';
+                $userAddresses = $this->executeQuery($sql, array(':userId' => $user['id']));
+            }
+        } catch(PDOException $ex) {
+            $this->logger->logError('An Error occured!');
+            $this->logger->logError($ex->getMessage());
+            throw $ex;
+        }
+
+        return $userAddresses;
+    }
+    
+    public function saveAddress($user, $line1, $line2, $line3, $line4, $line5, $postalCode, $city, $country){
+        $this->logger->logDebug('saveAddress(' . $user['id'] . ', ' . $line1 . ', ' . $line2 . ', ' . $line3 . ', ' . $line4 . ', ' . $line5 . ', ' . $postalCode . ', ' . $city . ', ' . $country . ')');
+        $addressId = -1;
+        try {
+            if (!empty($user)){
+                $this->getDb()->beginTransaction();
+                $sql = 'INSERT INTO user_address (user_id, address_line_1, address_line_2, address_line_3, address_line_4, address_line_5, postal_code, city_name, country_code) VALUES (:userId, :addressLine1, :addressLine2, :addressLine3, :addressLine4, :addressLine5, :postalCode, :cityName, :countryCode)';
+                $retour = $this->executeSimpleQuery($sql, array(':userId' => $user['id'], 
+                                    ':addressLine1' => $line1, 
+                                    ':addressLine2' => $line2, 
+                                    ':addressLine3' => $line3, 
+                                    ':addressLine4' => $line4, 
+                                    ':addressLine5' => $line5,
+                                    ':postalCode' => $postalCode,
+                                    ':cityName' => $city,
+                                    ':countryCode' => $country));
+                $addressId = $this->getDb()->lastInsertId();
+                $sql = 'UPDATE user SET shipping_address = :shippingAddress where id = :userId';
+                $retour = $this->executeSimpleQuery($sql, array(':userId' => $user['id'], ':shippingAddress' => $addressId));
+                $this->getDb()->commit();
+            }
+        } catch(PDOException $ex) {
+            $this->logger->logError('An Error occured!');
+            $this->logger->logError($ex->getMessage());
+            throw $ex;
+        }
+
+        return $addressId;
+    }
+
+    public function getCountries(){
+        $this->logger->logDebug('getCountries()');
+        try {
+            $sql = 'SELECT cty.id, cty.alpha3 AS countryCode, cty.name AS countryName FROM country AS cty ORDER BY countryName';
+            $countries = $this->executeQuery($sql, array());
+        } catch(PDOException $ex) {
+            $this->logger->logError('An Error occured!');
+            $this->logger->logError($ex->getMessage());
+            throw $ex;
+        }
+
+        return $countries;
+    }
+    
     public function createUser($firstname, $lastname, $email, $login, $password, $avatar){
         $this->logger->logDebug('createUser(' . $firstname . ', ' . $lastname . ', ' . $email . ', ' . $login . ', ' . $password . ', ' . $avatar . ')');
         $retour = FALSE;

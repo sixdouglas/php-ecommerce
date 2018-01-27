@@ -211,6 +211,54 @@ The Router has two actions for the Catalog:
 You need to be logged-in to view the add to cart button.
 ====
 
+== Shipping
+
+=== Objects
+
+The Shipping uses one controller:
+
+* `ShippingController.php`
+
+two models: 
+
+* `ShippinhModel.php`
+* `UserModel.php`
+
+and two views: 
+
+* `ShippingView.php`
+* `NewShippingAddressView.php`
+
+=== Database tables
+
+There are two database tables used here: 
+
+* `user`
+* `user_address` 
+* `order_shipping_address` 
+
+=== Functionalities
+
+The current fuctionalities are:
+
+* display fixed price for Home delivery
+* Create a shipping address
+* set it as default ShippingAddress for the client
+* set it as Shipping Address for the curent order
+
+=== Routing
+
+The Router has two actions for the Catalog:
+
+* validate
+* createAddress
+* saveAddress
+
+[TIP]
+====
+You can add a change Address functionality.
+====
+
 == Self-hosted third Libraries or work on this Website __Offline__
 
 If you want to make this site available when you're not connected to Internet (it seems weird to say it :))

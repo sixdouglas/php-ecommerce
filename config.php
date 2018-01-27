@@ -23,6 +23,6 @@ return [
         'user' => 'root',
         'password' => ''
     ],
-    'logLevel' => 'INFO'
+    'logLevel' => 'DEBUG'
 ];
 ?>

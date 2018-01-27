@@ -51,7 +51,7 @@ class CartModel extends AbstractModel {
                 $cart = $this->executeSimpleQuery($sql, array(':userId' => $user['id']));
                 $orderId = $this->getDb()->lastInsertId();
             }
-            if (is_null($lineId)){
+            if (empty($lineId)){
                 $sql = 'INSERT INTO order_lines (order_id, product_id, quantity, cost, price) VALUES (:orderId, :productId, :quantity, :cost, :price)';
                 $cart = $this->executeSimpleQuery($sql, array(':orderId' => $orderId, ':productId' => $product['id'], ':quantity' => 1, ':cost' => $product['cost'], ':price' => $product['price']));
             } else {

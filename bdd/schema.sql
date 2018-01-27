@@ -24,6 +24,16 @@ USE `php_ecommerce_db`;
 
 -- --------------------------------------------------------
 
+CREATE TABLE IF NOT EXISTS `country` (
+  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `alpha2` varchar(2) NOT NULL,
+  `alpha3` varchar(3) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `alpha2` (`alpha2`),
+  UNIQUE KEY `alpha3` (`alpha3`)
+) ENGINE=InnoDB;
+
 --
 -- `user` table structure
 --
@@ -39,6 +49,33 @@ CREATE TABLE IF NOT EXISTS `user` (
   CONSTRAINT `user_pk` PRIMARY KEY (`id`),
   CONSTRAINT `user_idx_1` UNIQUE INDEX (`login`)
 ) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `user_address` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `address_line_1` varchar(40) NOT NULL,
+  `address_line_2` varchar(40) NOT NULL,
+  `address_line_3` varchar(40) NOT NULL,
+  `address_line_4` varchar(40) NOT NULL,
+  `address_line_5` varchar(40) NOT NULL,
+  `postal_code` varchar(40) NOT NULL,
+  `city_name` varchar(40) NOT NULL,
+  `country_code` varchar(3) NOT NULL,
+  CONSTRAINT `user__address_pk` PRIMARY KEY (`id`),
+  INDEX `user_address_idx_1` (`user_id`),
+  INDEX `user_address_idx_2` (`country_code`),
+  CONSTRAINT `user_address_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `user_address_ibfk_2` FOREIGN KEY (`country_code`) REFERENCES `country` (`alpha3`)
+) ENGINE=InnoDB;
+
+ALTER TABLE `user`
+  ADD COLUMN IF NOT EXISTS `shipping_address` int(11) NULL,
+  ADD COLUMN IF NOT EXISTS `billing_address` int(11) NULL,
+  ADD CONSTRAINT IF NOT EXISTS `user_ibfk_2` FOREIGN KEY (`shipping_address`) REFERENCES `user_address` (`id`)
+  ADD CONSTRAINT IF NOT EXISTS `user_ibfk_3` FOREIGN KEY (`billing_address`) REFERENCES `user_address` (`id`);
+
+CREATE INDEX IF NOT EXISTS `user_idx_2` ON `user`(`shipping_address`);
+CREATE INDEX IF NOT EXISTS `user_idx_3` ON `user`(`billing_address`);
 
 CREATE TABLE IF NOT EXISTS `product_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -65,6 +102,8 @@ CREATE TABLE IF NOT EXISTS `products` (
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`type`) REFERENCES `product_types` (`id`)
 ) ENGINE=InnoDB;
 
+ALTER TABLE `products` ADD FULLTEXT(`description`);
+
 CREATE TABLE IF NOT EXISTS `orders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `order_date` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -88,4 +127,23 @@ CREATE TABLE IF NOT EXISTS `order_lines` (
   CONSTRAINT `order_lines_idx_2` UNIQUE INDEX (`product_id`),
   CONSTRAINT `order_lines_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
   CONSTRAINT `order_lines_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `order_address` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `type` ENUM ('SHIPPING', 'BILLING'),
+  `address_line_1` varchar(40) NOT NULL,
+  `address_line_2` varchar(40) NOT NULL,
+  `address_line_3` varchar(40) NOT NULL,
+  `address_line_4` varchar(40) NOT NULL,
+  `address_line_5` varchar(40) NOT NULL,
+  `postal_code` varchar(40) NOT NULL,
+  `city_name` varchar(40) NOT NULL,
+  `country_code` varchar(3) NOT NULL,
+  CONSTRAINT `order_address_pk` PRIMARY KEY (`id`),
+  INDEX `order_address_idx_1` (`user_id`),
+  INDEX `order_address_idx_2` (`country_code`),
+  CONSTRAINT `order_address_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  CONSTRAINT `order_address_ibfk_2` FOREIGN KEY (`country_code`) REFERENCES `country` (`alpha3`)
 ) ENGINE=InnoDB;

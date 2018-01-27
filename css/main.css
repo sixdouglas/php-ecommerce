@@ -213,6 +213,25 @@ ul.side-nav.leftside-navigation li:hover {
 
 /** /MENU **/
 
+   /* label underline focus color */
+.input-field input[type=text]:focus, .input-field input[type=password]:focus {
+    border-bottom: 1px solid #0097a7;
+    box-shadow: 0 1px 0 0 #0097a7;
+}
+/* valid color */
+.input-field input[type=text].valid, .input-field input[type=password].valid {
+    border-bottom: 1px solid #0097a7;
+    box-shadow: 0 1px 0 0 #0097a7;
+}
+/* label focus color */
+    .input-field input[type=text]:focus + label {
+    color: #000;
+}
+
+pre {
+    white-space: pre-wrap;       /* css-3 */
+}
+   
 /** PRODUCT TYPE **/
 
 .card .card-content .card-title {
@@ -366,6 +385,14 @@ h4 {
 }
 
 /** /CART-SUMMARY **/
+
+/** NEW-SHIPPING-ADDRESS **/
+
+.shipping-address-form .row {
+    margin-top: 0px;
+}
+
+/** /NEW-SHIPPING-ADDRESS **/
 
 /** FOOTER **/
 body {
